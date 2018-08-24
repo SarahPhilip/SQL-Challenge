@@ -146,7 +146,15 @@ f.film_id IN
 -- You want to run an email marketing campaign in Canada, for which you will need the names and email addresses of all Canadian customers. 
 -- Use joins to retrieve this information.
 
-
+SELECT c.first_name, c.last_name, c.email, a.address
+FROM customer AS c
+INNER JOIN address AS a ON c.address_id = a.address_id
+WHERE a.city_id IN
+	(SELECT city.city_id
+     FROM city
+     INNER JOIN country ON city.country_id = country.country_id
+     WHERE country.country = 'Canada'
+     );
 
 
 
