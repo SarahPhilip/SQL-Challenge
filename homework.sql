@@ -157,5 +157,29 @@ WHERE a.city_id IN
      );
 
 
+-- 7d. 
+-- Sales have been lagging among young families, and you wish to target all family movies for a promotion. 
+-- Identify all movies categorized as family films.
 
 
+SELECT f.title 
+FROM film AS f
+WHERE f.film_id IN
+	(SELECT film_id 
+     FROM film_category AS fc
+     WHERE fc.category_id IN
+		(SELECT c.category_id
+         FROM category AS c
+		 WHERE c.name = 'Family'
+         )
+		);
+
+-- 7e
+-- Display the most frequently rented movies in descending order.
+SELECT film_id 
+FROM inventory
+WHERE inventory_id IN
+	(SELECT inventory_id, COUNT(inventory_id)
+	FROM rental
+	GROUP BY inventory_id
+	ORDER BY COUNT(inventory_id) DESC)
