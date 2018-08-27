@@ -221,3 +221,17 @@ SELECT store.store_id, SUM(payment.amount)
     JOIN store ON store.store_id = staff.store_id
     JOIN payment ON staff.staff_id = payment.staff_id
     GROUP BY store.store_id;
+    
+-- 7g. 
+-- Write a query to display for each store its store ID, city, and country.-- 
+
+SELECT s.store_id, c.city, co.country
+	FROM store s
+    JOIN address a ON s.address_id = a.address_id
+    JOIN city c On a.city_id = c.city_id
+    JOIN country co ON c.country_id = co.country_id;
+    
+-- 7h 
+-- List the top five genres in gross revenue in descending order. 
+-- (Hint: you may need to use the following tables: category, film_category, inventory, payment, and rental.)
+
