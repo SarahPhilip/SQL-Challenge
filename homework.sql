@@ -226,21 +226,32 @@ SELECT c.name, SUM(p.amount)
     ORDER BY SUM(p.amount) DESC
     LIMIT 5;
 
--- SELECT C.name 
--- 	FROM category
---     WHERE category_id 
--- 		IN (
--- 			SELECT category_id
--- 				FROM film_category
---                 WHERE film_id 
--- 					IN (
--- 						SELECT film_id
--- 							FROM inventory
---                             WHERE inventory_id
--- 								IN (
--- 									SELECT inventory_id
--- 										FROM rental
---                                         WHERE rental_id
---                                          IN (
--- 											SELECT rental_id
--- 												FROM PAYMENT
+-- 8a
+-- In your new role as an executive, you would like to have an easy way of viewing the Top five genres by gross revenue. 
+-- Use the solution from the problem above to create a view. If you haven't solved 7h, you can substitute another query to create a view.
+
+
+CREATE VIEW top_five_genres AS
+	SELECT c.name, SUM(p.amount)
+	FROM category c
+    JOIN film_category f ON c.category_id = f.category_id
+    JOIN inventory i ON i.film_id = f.film_id
+    JOIN rental r ON r.inventory_id = i.inventory_id
+    JOIN payment p ON p.rental_id = r.rental_id
+    GROUP BY c.name
+    ORDER BY SUM(p.amount) DESC
+    LIMIT 5;
+    
+-- 8b
+-- How would you display the view that you created in 8a?
+
+SELECT *
+	FROM top_five_genres;
+
+-- 8c
+-- You find that you no longer need the view top_five_genres. 
+-- Write a query to delete it.
+
+DROP VIEW top_five_genres;
+
+
