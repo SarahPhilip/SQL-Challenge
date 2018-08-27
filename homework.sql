@@ -177,26 +177,6 @@ WHERE f.film_id IN
 -- 7e
 -- Display the most frequently rented movies in descending order.
 
--- SELECT title, count(title)
--- 	FROM film
---     WHERE film_id
---     IN (
-		-- SELECT film_id, count(film_id)
--- 			FROM inventory
---             WHERE inventory_id 
---             IN (
--- 				SELECT inventory_id 
--- 					FROM rental
---                     WHERE rental_id 
---                     IN (
--- 						SELECT rental_id
--- 							FROM payment
---                             )
--- 					)
--- 				-- )
---                 GROUP BY film_id
---                 ORDER BY count(film_id) DESC;
-
 SELECT film.title, COUNT(inventory.film_id)
 	FROM inventory 
     JOIN film ON film.film_id=inventory.film_id
@@ -235,3 +215,32 @@ SELECT s.store_id, c.city, co.country
 -- List the top five genres in gross revenue in descending order. 
 -- (Hint: you may need to use the following tables: category, film_category, inventory, payment, and rental.)
 
+
+SELECT c.name, SUM(p.amount)
+	FROM category c
+    JOIN film_category f ON c.category_id = f.category_id
+    JOIN inventory i ON i.film_id = f.film_id
+    JOIN rental r ON r.inventory_id = i.inventory_id
+    JOIN payment p ON p.rental_id = r.rental_id
+    GROUP BY c.name
+    ORDER BY SUM(p.amount) DESC
+    LIMIT 5;
+
+-- SELECT C.name 
+-- 	FROM category
+--     WHERE category_id 
+-- 		IN (
+-- 			SELECT category_id
+-- 				FROM film_category
+--                 WHERE film_id 
+-- 					IN (
+-- 						SELECT film_id
+-- 							FROM inventory
+--                             WHERE inventory_id
+-- 								IN (
+-- 									SELECT inventory_id
+-- 										FROM rental
+--                                         WHERE rental_id
+--                                          IN (
+-- 											SELECT rental_id
+-- 												FROM PAYMENT
